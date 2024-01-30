@@ -1,5 +1,5 @@
 Dependencies: 
-Install anaconda (for conda and jupyter notebooks) https://www.anaconda.com/download
+Install anaconda (for conda and jupyter notebook) https://www.anaconda.com/download
 Install YeaZ in a conda environment titled yeaz https://github.com/rahi-lab/YeaZ-GUI/blob/master/readme.md
 Enable conda in powershell https://gist.github.com/martinsotir/2bd2e16332dff71e0fa5be3ed3468a6c
 Install Fiji https://imagej.net/software/fiji/downloads
