@@ -1,8 +1,18 @@
+Dependencies: 
+Install anaconda (for conda and jupyter notebooks) https://www.anaconda.com/download
+Install YeaZ in a conda environment titled yeaz https://github.com/rahi-lab/YeaZ-GUI/blob/master/readme.md
+Enable conda in powershell https://gist.github.com/martinsotir/2bd2e16332dff71e0fa5be3ed3468a6c
+Install Fiji https://imagej.net/software/fiji/downloads
+Install Stardist plugin for Fiji https://imagej.net/plugins/stardist
+--------------------------------------
+--------------------------------------
 0. Folder formating
 
 make sure .nd2s of interest are in folders
 .nd2 from experiment(s) should be in a folder 
 .nd2 for autoflourescent normalization controls (ACY1516 cells) should be in a seperate folder
+
+.nd2 files should only have RFP, GFP, and DIC channels. z-stack not supported at this time
 ---------------------------------------
 1. FIJI/Stardist (do this step first, the powershell step needs a DIC layer only image which FIJI will split off as a .tif)
 
