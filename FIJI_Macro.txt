@@ -1,0 +1,59 @@
+#@ String (label="Enter folder path with .nd2 files", description="Name field") inputFolder
+suffix=".nd2"
+suffix2=".Nd2"
+listOfImages = getFileList(inputFolder);
+print(suffix)
+print(inputFolder)
+
+for (i = 0; i < lengthOf(listOfImages); i++) {
+
+    if ((endsWith(listOfImages[i], suffix)) || (endsWith(listOfImages[i], suffix2))) { 
+    	
+		inputpath=inputFolder + File.separator + listOfImages[i];
+		print(inputpath) ;
+
+		filenameWOextention = File.getNameWithoutExtension(inputpath);
+		print(filenameWOextention);
+		
+		filenameWextension=listOfImages[i];
+		print(filenameWextension);	
+		
+		dic_tif_outputpath=inputFolder+File.separator+filenameWOextention+"dic.tif";
+		print(dic_tif_outputpath);
+		
+		nuclei_h5_outputpath=inputFolder+File.separator+filenameWOextention+"nuclei.h5";
+		print(nuclei_h5_outputpath);
+		
+		inputpathforwardslash=inputpath;
+		inputpathforwardslash=replace(inputpathforwardslash, "\\",  "/" );
+		print(inputpathforwardslash);
+		
+		run("Bio-Formats Importer", "open=[inputpath] color_mode=Default rois_import=[ROI manager] split_channels view=Hyperstack stack_order=XYCZT");
+
+		selectImage(filenameWextension+" - C=1");
+		close();
+		
+		selectImage(filenameWextension+" - C=2");
+		saveAs("Tiff", dic_tif_outputpath);
+		close();
+		
+		inputpathRFPchannel=filenameWextension+" - C=0";
+		print(inputpathRFPchannel);
+		
+		stardistcommand="command=[de.csbdresden.stardist.StarDist2D], args=['input':'" +inputpathRFPchannel+"', 'modelChoice':'Versatile (fluorescent nuclei)', 'normalizeInput':'true', 'percentileBottom':'1.1', 'percentileTop':'99.89999999999999', 'probThresh':'0.5', 'nmsThresh':'0.0', 'outputType':'Both', 'nTiles':'1', 'excludeBoundary':'2', 'roiPosition':'Automatic', 'verbose':'false', 'showCsbdeepProgress':'false', 'showProbAndDist':'false'], process=[false]";
+		run("Command From Macro", stardistcommand);
+		selectImage(filenameWextension+" - C=0");
+		close();
+		
+		selectImage("Label Image");
+		run("Scriptable save HDF5 (new or replace)...", "save=[nuclei_h5_outputpath] dsetnametemplate=/t{t}/channel{c} formattime=%d formatchannel=%d compressionlevel=0");
+		selectImage("Label Image");
+		close();
+		
+		
+    }
+    
+    
+}
+
+

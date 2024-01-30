@@ -1,0 +1,24 @@
+conda activate yeaz
+
+$ImageFolder = "C:\Users\Titan\Desktop\exp"
+$InputFormat = '.tif'
+$OutputSuffix = 'cells.h5'
+
+$pyLocationuntruncated = pip show -f yeaz | findstr /C:"Location:"
+$pyLocationtruncated=${pyLocationuntruncated}.Trim("Location:").Trim()
+$pyfullpath=${pyLocationtruncated}+'\yeaz\Launch_NN_command_line.py'
+
+
+Get-ChildItem "$ImageFolder\*$InputFormat" |
+ForEach-Object {
+    $Filename = $_.BaseName
+
+    $InputPath = "`"$ImageFolder\$Filename$InputFormat`""
+    $OutputPath = "`"$ImageFolder\$Filename$OutputSuffix`""
+
+    python $pyfullpath -i $InputPath -m $OutputPath --image_type "bf" --device "cuda" --range_of_frames 0 0  --threshold 0.5 --min_seed_dist 5
+
+}
+
+
+
